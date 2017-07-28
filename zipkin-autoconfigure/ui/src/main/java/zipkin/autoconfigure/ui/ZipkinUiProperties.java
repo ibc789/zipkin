@@ -1,5 +1,5 @@
 /**
- * Copyright 2015-2016 The OpenZipkin Authors
+ * Copyright 2015-2017 The OpenZipkin Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -24,6 +24,8 @@ public class ZipkinUiProperties {
   private int defaultLookback = (int) TimeUnit.DAYS.toMillis(7);
   private String instrumented = ".*";
   private String logsUrl = null;
+  private float dependencyLowErrorRate = 0.5f; // 50% of calls in error turns line yellow
+  private float dependencyHighErrorRate = 0.75f; // 75% of calls in error turns line red
 
   public int getDefaultLookback() {
     return defaultLookback;
@@ -65,5 +67,21 @@ public class ZipkinUiProperties {
     if (!StringUtils.isEmpty(logsUrl)) {
       this.logsUrl = logsUrl;
     }
+  }
+
+  public float getDependencyLowErrorRate() {
+    return dependencyLowErrorRate;
+  }
+
+  public void setDependencyLowErrorRate(float dependencyLowErrorRate) {
+    this.dependencyLowErrorRate = dependencyLowErrorRate;
+  }
+
+  public float getDependencyHighErrorRate() {
+    return dependencyHighErrorRate;
+  }
+
+  public void setDependencyHighErrorRate(float dependencyHighErrorRate) {
+    this.dependencyHighErrorRate = dependencyHighErrorRate;
   }
 }

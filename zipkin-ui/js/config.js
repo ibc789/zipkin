@@ -3,7 +3,9 @@ import $ from 'jquery';
 const defaults = {
   environment: '',
   queryLimit: 10,
-  defaultLookback: 60 * 60 * 1000 // 1 hour
+  defaultLookback: 60 * 60 * 1000, // 1 hour
+  dependencyLowErrorRate: 0.5, // 50% of calls in error turns line yellow
+  dependencyHighErrorRate: 0.75 // 75% of calls in error turns line red
 };
 
 export default function loadConfig() {

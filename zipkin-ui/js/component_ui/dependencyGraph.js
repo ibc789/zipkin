@@ -7,6 +7,8 @@ const dagre = window.dagreD3;
 
 export default component(function dependencyGraph() {
   this.after('initialize', function afterInitialize(container) {
+    const lowErrorRate = this.attr.config('dependencyLowErrorRate');
+    const highErrorRate = this.attr.config('dependencyHighErrorRate');
     this.on(document, 'dependencyDataReceived', function onDependencyDataReceived(ev, ...links) {
       const _this = this;
       const rootSvg = container.querySelector('svg');
@@ -155,9 +157,9 @@ export default component(function dependencyGraph() {
 
           const errorCount = gInner.edge(edge).errorCount || 0;
           const errorRate = errorCount / callCount;
-          if (errorRate >= 0.75) {
+          if (errorRate >= highErrorRate) {
             $el.css('stroke', 'rgb(230, 162, 161)');
-          } else if (errorRate >= 0.50) {
+          } else if (errorRate >= lowErrorRate) {
             $el.css('stroke', 'rgb(230, 215, 140)');
           }
 
