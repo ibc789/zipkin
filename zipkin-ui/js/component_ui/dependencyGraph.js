@@ -85,13 +85,15 @@ export default component(function dependencyGraph() {
       });
 
       // Add edges/dependency links to the graph
-      links.filter(link => link.parent !== link.child).forEach(({parent, child, callCount}) => {
-        g.addEdge(`${parent}->${child}`, parent, child, {
-          from: parent,
-          to: child,
-          callCount
-        });
-      });
+      links.filter(link => link.parent !== link.child)
+           .forEach(({parent, child, callCount, errorCount}) => {
+             g.addEdge(`${parent}->${child}`, parent, child, {
+               from: parent,
+               to: child,
+               callCount,
+               errorCount
+             });
+           });
 
       const layout = dagre.layout()
         .nodeSep(30)
@@ -150,6 +152,14 @@ export default component(function dependencyGraph() {
           const callCount = gInner.edge(edge).callCount;
           const arrowWidthPx = `${arrowWidth(callCount)}px`;
           $el.css('stroke-width', arrowWidthPx);
+
+          const errorCount = gInner.edge(edge).errorCount || 0;
+          const errorRate = errorCount / callCount;
+          if (errorRate >= 0.75) {
+            $el.css('stroke', 'rgb(230, 162, 161)');
+          } else if (errorRate >= 0.50) {
+            $el.css('stroke', 'rgb(230, 215, 140)');
+          }
 
           $el.hover(() => {
             rootSvg.classList.add('dark');
